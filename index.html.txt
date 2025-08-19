@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentEquip Pro - Heavy Equipment Rental Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #2c3e50;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(52, 152, 219, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%23f4f4f4" width="1200" height="400"/><rect fill="%23ddd" x="100" y="150" width="200" height="100" rx="10"/><rect fill="%23bbb" x="120" y="170" width="160" height="20" rx="5"/><rect fill="%23aaa" x="120" y="200" width="120" height="15" rx="3"/><circle fill="%23888" cx="400" cy="200" r="50"/><rect fill="%23666" x="500" y="180" width="100" height="40" rx="5"/><text x="600" y="320" font-family="Arial" font-size="24" fill="%23555">Heavy Equipment Rental</text></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .search-section {
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select {
+            padding: 0.7rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .equipment-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .equipment-image {
+            height: 200px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .equipment-info {
+            padding: 1.5rem;
+        }
+
+        .equipment-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .equipment-specs {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .pricing {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .price-item {
+            text-align: center;
+        }
+
+        .price-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .price-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .limited {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .booking-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .booking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .date-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .cost-breakdown {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-cost {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #27ae60;
+            border-top: 2px solid #ddd;
+            padding-top: 0.5rem;
+        }
+
+        .commission-info {
+            background: #e8f4fd;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .commission-info h3 {
+            color: #2980b9;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-section {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            padding: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: #34495e;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .date-range {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-buttons {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🚜 RentEquip Pro</div>
+                <div class="nav-buttons">
+                    <a href="#" class="btn btn-secondary">List Equipment</a>
+                    <a href="#" class="btn btn-secondary">Sign In</a>
+                    <a href="#" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Heavy Equipment Rental Made Easy</h1>
+            <p>Connect with trusted rental companies for trucks, JCBs, tractors, and infrastructure equipment</p>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div class="container">
+            <form class="search-form">
+                <div class="form-group">
+                    <label for="equipment-type">Equipment Type</label>
+                    <select id="equipment-type">
+                        <option value="">All Equipment</option>
+                        <option value="excavator">Excavators</option>
+                        <option value="truck">Trucks</option>
+                        <option value="crane">Cranes</option>
+                        <option value="dozer">Bulldozers</option>
+                        <option value="loader">Loaders</option>
+                        <option value="tractor">Tractors</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="Enter city or area">
+                </div>
+                <div class="form-group">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date">
+                </div>
+                <div class="form-group">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date">
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="searchEquipment()">Search Equipment</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="commission-info">
+            <h3>💼 Platform Commission: 1%</h3>
+            <p>We charge only 1% commission per transaction to connect you with reliable equipment rental companies</p>
+        </div>
+
+        <div class="equipment-grid" id="equipment-grid">
+            <!-- Equipment cards will be generated here -->
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <h2>Trusted by Thousands</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div>Equipment Available</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">150+</div>
+                    <div>Rental Companies</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2000+</div>
+                    <div>Satisfied Customers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div>Customer Support</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="booking-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Book Equipment</h2>
+                <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <form class="booking-form" id="booking-form">
+                <div class="form-group">
+                    <label>Equipment:</label>
+                    <input type="text" id="booking-equipment" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Rental Company:</label>
+                    <input type="text" id="booking-company" readonly>
+                </div>
+                <div class="date-range">
+                    <div class="form-group">
+                        <label for="booking-start">Start Date:</label>
+                        <input type="date" id="booking-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-end">End Date:</label>
+                        <input type="date" id="booking-end" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rental-type">Pricing Type:</label>
+                    <select id="rental-type" onchange="updateCostBreakdown()">
+                        <option value="daily">Daily Rate</option>
+                        <option value="hourly">Hourly Rate</option>
+                    </select>
+                </div>
+                <div class="form-group" id="hours-group" style="display: none;">
+                    <label for="hours-per-day">Hours per day:</label>
+                    <input type="number" id="hours-per-day" min="1" max="24" value="8" onchange="updateCostBreakdown()">
+                </div>
+                <div class="form-group">
+                    <label for="customer-name">Your Name:</label>
+                    <input type="text" id="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Phone Number:</label>
+                    <input type="tel" id="customer-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Email:</label>
+                    <input type="email" id="customer-email" required>
+                </div>
+                
+                <div class="cost-breakdown" id="cost-breakdown">
+                    <h3>Cost Breakdown</h3>
+                    <div class="cost-row">
+                        <span>Duration:</span>
+                        <span id="duration-display">0 days</span>
+                    </div>
+                    <div class="cost-row">
+                        <span>Rate:</span>
+                        <span id="rate-display">$0</span>
+                    </div>
+                    <div class="cost-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal-display">$0</span>
+                    </div>
+                    <div class="cost-row">
+                        <span>Platform Fee (1%):</span>
+                        <span id="commission-display">$0</span>
+                    </div>
+                    <div class="cost-row total-cost">
+                        <span>Total Cost:</span>
+                        <span id="total-display">$0</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 RentEquip Pro. All rights reserved. | 📞 24/7 Support: 1-800-RENTEQUIP</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample equipment data
+        const equipmentData = [
+            {
+                id: 1,
+                name: "CAT 320 Excavator",
+                type: "excavator",
+                company: "Heavy Machinery Rentals Inc.",
+                location: "New York",
+                hourlyRate: 85,
+                dailyRate: 650,
+                specs: "20-ton capacity, 360° rotation, GPS tracking",
+                availability: "available",
+                icon: "🚜"
+            },
+            {
+                id: 2,
+                name: "Volvo FH16 Truck",
+                type: "truck",
+                company: "Transport Solutions LLC",
+                location: "Los Angeles",
+                hourlyRate: 45,
+                dailyRate: 350,
+                specs: "40-ton capacity, refrigerated unit available",
+                availability: "available",
+                icon: "🚛"
+            },
+            {
+                id: 3,
+                name: "Liebherr LTM Crane",
+                type: "crane",
+                company: "Skyline Equipment Co.",
+                location: "Chicago",
+                hourlyRate: 120,
+                dailyRate: 950,
+                specs: "80-ton capacity, 60m boom reach",
+                availability: "limited",
+                icon: "🏗️"
+            },
+            {
+                id: 4,
+                name: "JCB 4CX Backhoe",
+                type: "loader",
+                company: "Construction Gear Pro",
+                location: "Houston",
+                hourlyRate: 55,
+                dailyRate: 425,
+                specs: "4WD, extendable boom, multiple attachments",
+                availability: "available",
+                icon: "🚜"
+            },
+            {
+                id: 5,
+                name: "CAT D6T Bulldozer",
+                type: "dozer",
+                company: "Earthworks Equipment",
+                location: "Phoenix",
+                hourlyRate: 95,
+                dailyRate: 750,
+                specs: "145 HP, GPS grading, ROPS cabin",
+                availability: "available",
+                icon: "🚧"
+            },
+            {
+                id: 6,
+                name: "John Deere 8370R Tractor",
+                type: "tractor",
+                company: "AgriRent Solutions",
+                location: "Dallas",
+                hourlyRate: 65,
+                dailyRate: 480,
+                specs: "370 HP, CVT transmission, precision farming ready",
+                availability: "available",
+                icon: "🚜"
+            }
+        ];
+
+        let selectedEquipment = null;
+
+        // Initialize the page
+        function init() {
+            displayEquipment(equipmentData);
+            setMinDate();
+        }
+
+        // Set minimum date to today
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('start-date').min = today;
+            document.getElementById('end-date').min = today;
+            document.getElementById('booking-start').min = today;
+            document.getElementById('booking-end').min = today;
+        }
+
+        // Display equipment cards
+        function displayEquipment(equipment) {
+            const grid = document.getElementById('equipment-grid');
+            grid.innerHTML = '';
+
+            equipment.forEach(item => {
+                const card = createEquipmentCard(item);
+                grid.appendChild(card);
+            });
+        }
+
+        // Create equipment card
+        function createEquipmentCard(equipment) {
+            const card = document.createElement('div');
+            card.className = 'equipment-card';
+            
+            card.innerHTML = `
+                <div class="equipment-image">
+                    <div style="font-size: 4rem;">${equipment.icon}</div>
+                </div>
+                <div class="equipment-info">
+                    <h3 class="equipment-title">${equipment.name}</h3>
+                    <p class="equipment-specs">${equipment.specs}</p>
+                    <div class="pricing">
+                        <div class="price-item">
+                            <div class="price-label">Hourly Rate</div>
+                            <div class="price-value">$${equipment.hourlyRate}</div>
+                        </div>
+                        <div class="price-item">
+                            <div class="price-label">Daily Rate</div>
+                            <div class="price-value">$${equipment.dailyRate}</div>
+                        </div>
+                    </div>
+                    <div class="availability ${equipment.availability}">${equipment.availability.toUpperCase()}</div>
+                    <p><strong>Company:</strong> ${equipment.company}</p>
+                    <p><strong>Location:</strong> ${equipment.location}</p>
+                    <button class="btn btn-primary" onclick="openBookingModal(${equipment.id})" style="width: 100%; margin-top: 1rem;">
+                        Book Now
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Search equipment
+        function searchEquipment() {
+            const type = document.getElementById('equipment-type').value;
+            const location = document.getElementById('location').value.toLowerCase();
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+
+            let filtered = equipmentData;
+
+            if (type) {
+                filtered = filtered.filter(item => item.type === type);
+            }
+
+            if (location) {
+                filtered = filtered.filter(item => 
+                    item.location.toLowerCase().includes(location)
+                );
+            }
+
+            displayEquipment(filtered);
+
+            if (filtered.length === 0) {
+                document.getElementById('equipment-grid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                        <h3>No equipment found matching your criteria</h3>
+                        <p>Try adjusting your search filters</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Open booking modal
+        function openBookingModal(equipmentId) {
+            selectedEquipment = equipmentData.find(item => item.id === equipmentId);
+            
+            document.getElementById('booking-equipment').value = selectedEquipment.name;
+            document.getElementById('booking-company').value = selectedEquipment.company;
+            
+            document.getElementById('booking-modal').style.display = 'flex';
+            updateCostBreakdown();
+        }
+
+        // Close booking modal
+        function closeBookingModal() {
+            document.getElementById('booking-modal').style.display = 'none';
+            document.getElementById('booking-form').reset();
+        }
+
+        // Update cost breakdown
+        function updateCostBreakdown() {
+            if (!selectedEquipment) return;
+
+            const startDate = document.getElementById('booking-start').value;
+            const endDate = document.getElementById('booking-end').value;
+            const rentalType = document.getElementById('rental-type').value;
+            const hoursPerDay = parseInt(document.getElementById('hours-per-day').value) || 8;
+
+            // Show/hide hours input
+            const hoursGroup = document.getElementById('hours-group');
+            hoursGroup.style.display = rentalType === 'hourly' ? 'block' : 'none';
+
+            if (!startDate || !endDate) return;
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const timeDiff = end.getTime() - start.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            if (daysDiff <= 0) return;
+
+            let rate, duration, subtotal;
+
+            if (rentalType === 'hourly') {
+                rate = selectedEquipment.hourlyRate;
+                const totalHours = daysDiff * hoursPerDay;
+                duration = `${daysDiff} days × ${hoursPerDay} hours = ${totalHours} hours`;
+                subtotal = rate * totalHours;
+                document.getElementById('rate-display').textContent = `$${rate}/hour`;
+            } else {
+                rate = selectedEquipment.dailyRate;
+                duration = `${daysDiff} days`;
+                subtotal = rate * daysDiff;
+                document.getElementById('rate-display').textContent = `$${rate}/day`;
+            }
+
+            const commission = subtotal * 0.01; // 1% commission
+            const total = subtotal + commission;
+
+            document.getElementById('duration-display').textContent = duration;
+            document.getElementById('subtotal-display').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('commission-display').textContent = `$${commission.toFixed(2)}`;
+            document.getElementById('total-display').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Handle form submission
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const startDate = document.getElementById('booking-start').value;
+            const endDate = document.getElementById('booking-end').value;
+            const customerName = document.getElementById('customer-name').value;
+            const total = document.getElementById('total-display').textContent;
+
+            alert(`Booking Confirmed! 🎉\n\nCustomer: ${customerName}\nEquipment: ${selectedEquipment.name}\nDates: ${startDate} to ${endDate}\nTotal Cost: ${total}\n\nA confirmation email will be sent shortly.`);
+            
+            closeBookingModal();
+        });
+
+        // Handle date changes in booking form
+        document.getElementById('booking-start').addEventListener('change', updateCostBreakdown);
+        document.getElementById('booking-end').addEventListener('change', updateCostBreakdown);
+        document.getElementById('hours-per-day').addEventListener('change', updateCostBreakdown);
+
+        // Initialize the page when loaded
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
